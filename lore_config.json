@@ -1,0 +1,24 @@
+{
+  "zeta_zero_file": "/Users/severian/Downloads/ZETA ENTROPY FIELD/zetazeros-50k.txt",
+  "num_zeros_to_use": 50000,
+  "N_min": 2,
+  "N_max": 1000,
+  "y_grid_points": 10000,
+  "local_entropy_window": 100,
+  "score_weights": {
+    "envelope": 0.6,
+    "curvature": 3.5,
+    "frequency": 0.6,
+    "entropy": 3.5
+  },
+  "top_N_predictions": 100,
+  "prediction_tolerance": 1.0,
+  "graph_neighbors": 3,
+  "graph_score_threshold": 0.01,
+  "graph_layout_seed": 42,
+  "interactive_edge_prune_quantile": 0.7,
+  "living_edge_prune_quantile": 0.7,
+  "output_dir": "lore_results_4-23-25",
+  "performance_log_file": "lore_performance_log.jsonl",
+  "save_graph_file": "zeta_field_graph.pkl"
+} 

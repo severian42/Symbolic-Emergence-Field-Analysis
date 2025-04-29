@@ -1,0 +1,20 @@
+Run with 100 zeros from zetazeros-20k.txt:
+Precision: 0.750, Recall: 0.446, F1: 0.560, KL: 3.704, MI: 0.0003
+Random Baseline: {'precision': 0.54, 'recall': 0.32142857142857145, 'f1': 0.4029850746268657, 'error_mean': 1.79, 'error_std': 1.5703184390434952}
+
+Run with 100 zeros from zetazeros-20k.txt:
+Precision: 0.750, Recall: 0.446, F1: 0.560, KL: 3.704, MI: 0.0003
+Random Baseline: {'precision': 0.61, 'recall': 0.3630952380952381, 'f1': 0.45522388059701496, 'error_mean': 1.8, 'error_std': 1.8973665961010275}
+
+Run with 100 zeros from zetazeros-20k.txt:
+Precision: 0.750, Recall: 0.446, F1: 0.560, KL: 3.704, MI: 0.0003
+Random Baseline: {'precision': 0.35, 'recall': 0.20833333333333334, 'f1': 0.2611940298507463, 'error_mean': 2.39, 'error_std': 1.89681311678299}
+
+Run with 100 zeros from zetazeros-20k.txt:
+Precision: 0.750, Recall: 0.446, F1: 0.560, KL: 3.704, MI: 0.0003
+Random Baseline: {'precision': 0.47, 'recall': 0.27976190476190477, 'f1': 0.35074626865671643, 'error_mean': 1.96, 'error_std': 1.5094369811290567}
+
+Run with 100000 zeros from /Users/severian/Downloads/ZETA ENTROPY FIELD/zetazeros-50k.txt:
+Precision: 0.800, Recall: 0.476, F1: 0.597, KL: 3.306, MI: 0.0000
+Random Baseline: {'precision': 0.39, 'recall': 0.23214285714285715, 'f1': 0.291044776119403, 'error_mean': 2.08, 'error_std': 1.4048487463068755}
+
