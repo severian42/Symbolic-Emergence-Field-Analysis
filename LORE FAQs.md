@@ -1,6 +1,3 @@
-﻿________________
-
-
 FAQ for Reviewers: Spectral Symbolic Emergence from the Riemann Zeta Function via LORE
 ________________
 
