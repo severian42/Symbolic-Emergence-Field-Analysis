@@ -1,0 +1,99 @@
+--- Parameters (JSON) ---
+{
+  "zeta_file": "zetazeros-50k.txt",
+  "num_zeros": 50000,
+  "N_min": 2,
+  "N_max": 1000,
+  "grid_points": 50000,
+  "entropy_window": "1232",
+  "entropy_bins": 15,
+  "weights": {
+    "envelope": 0.9,
+    "curvature": 3.5,
+    "frequency": 0.9,
+    "entropy": 3.5,
+    "energy": 0.5
+  },
+  "peak_threshold": 0.0,
+  "top_N_predictions": 100,
+  "tolerance": 0,
+  "output_dir": "lore_standalone_results",
+  "edge_correction": null,
+  "run_shuffled_gamma": true,
+  "run_gue_gamma": true,
+  "run_synthetic_target": true,
+  "run_train_test_split": true,
+  "taper": "lorentz",
+  "gamma_cutoff": null,
+  "grid_type": "log",
+  "actual_num_zeros_used": 50000,
+  "dy_log_spacing": 0.00012429464786145594,
+  "exponents": {
+    "alpha": 0.2350492054808935,
+    "beta": 1.641872765647892,
+    "gamma": 1.6042674844122442,
+    "delta": 0.5188105444589698
+  },
+  "peak_threshold_method": "manual"
+}
+
+--- Summary Report ---
+
+Parameters Used:
+----------------
+Zeta Zero File: zetazeros-50k.txt
+Number of Zeros Used: 50000 (Target: 50000)
+Domain N: [2, 1000]
+Log Grid Points: 50000 (dy=0.000124)
+Entropy Window: 100 points
+Entropy Bins: 15
+LORE Weights: {'envelope': 0.9, 'curvature': 3.5, 'frequency': 0.9, 'entropy': 3.5, 'energy': 0.5}
+Peak Threshold: 0 (manual)
+Top N Predictions: 100 (Actual Unique Integers: 79)
+Prediction Tolerance: ±0
+
+Performance Metrics:
+--------------------
+True Primes in Range: 168
+True Positives (TP - Hits): 71
+False Positives (FP - Misses): 8
+False Negatives (FN - Primes Missed): 97
+Distinct Primes Hit: 71
+
+Precision (TP / Total Pred): 0.8987
+Recall (Distinct Primes Hit / Total Primes): 0.4226
+F1 Score (Harmonic Mean): 0.5749
+AUROC: 0.9774
+Average Precision (AP): 0.7849
+
+Analysis & Comparison:
+----------------------
+Random Baseline F1 Score: 0.1296
+Odds Baseline: Precision=0.3360, Recall=1.0000, F1=0.5030
+Von Mangoldt Baseline (top k=79): Precision=0.9057, Recall=0.2857, F1=0.4344
+KL Divergence (TP Dist. vs Uniform): -0.1059 nats
+Mutual Information (LORE Score Bin vs Prime Loc): 0.0033
+
+--- Robustness/Control Experiments ---
+Shuffled Gamma: AUROC=0.9774153343647929, AP=0.7848765049817275
+GUE Gamma: AUROC=0.48486476419689406, AP=0.17257134802194668
+Synthetic Target (Hamming-5): AUROC=0.5181466607169418, AP=0.2547007430748728
+
+--- Train/Test Split Results ---
+  Train (2-1000): N=[2,1000], Primes=168, AUROC=0.9774, AP=0.7849
+  Test1 (1000-10000): N=[1000,10000], Primes=1061, AUROC=0.8314, AP=0.3425
+  Test2 (10000-100000): N=[10000,100000], Primes=8363, AUROC=0.5484, AP=0.1140
+
+
+Output Files:
+-------------
+Results Directory: lore_standalone_results
+Results CSV: lore_full_results_standalone.csv
+LORE Score Plot: lore_score_validation_standalone.png
+Prediction Dist. Plot: prediction_distribution_standalone.png
+Precision-vs-k Plot: lore_precision_vs_k.png
+
+--- Prediction Lists ---
+TP List (71): [np.int64(3), np.int64(5), np.int64(7), np.int64(11), np.int64(13), np.int64(17), np.int64(19), np.int64(23), np.int64(29), np.int64(31), np.int64(37), np.int64(41), np.int64(43), np.int64(47), np.int64(53), np.int64(59), np.int64(61), np.int64(67), np.int64(71), np.int64(73), np.int64(79), np.int64(83), np.int64(89), np.int64(97), np.int64(101), np.int64(103), np.int64(107), np.int64(109), np.int64(113), np.int64(127), np.int64(131), np.int64(137), np.int64(139), np.int64(149), np.int64(151), np.int64(193), np.int64(197), np.int64(199), np.int64(211), np.int64(487), np.int64(491), np.int64(499), np.int64(503), np.int64(509), np.int64(521), np.int64(523), np.int64(541), np.int64(547), np.int64(557), np.int64(563), np.int64(569), np.int64(571), np.int64(577), np.int64(587), np.int64(593), np.int64(599), np.int64(601), np.int64(631), np.int64(907), np.int64(911), np.int64(919), np.int64(929), np.int64(937), np.int64(941), np.int64(947), np.int64(953), np.int64(967), np.int64(971), np.int64(977), np.int64(983), np.int64(991)]
+FP List (8): [np.int64(9), np.int64(25), np.int64(49), np.int64(529), np.int64(535), np.int64(961), np.int64(988), np.int64(990)]
+FN List (97): [2, 157, 163, 167, 173, 179, 181, 191, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 607, 613, 617, 619, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883, 887, 997]
