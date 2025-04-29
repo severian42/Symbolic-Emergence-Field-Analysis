@@ -32,6 +32,47 @@ SEFA is my answer. It's a mathematical toolkit designed to listen for the "hidde
 
 The goal isn't just detection, but *quantification*—providing a principled, interpretable score for how much structure is present at any given point.
 
+**Here is the logic and math flow of SEFA:**
+
+```ascii
+Driver Extraction                Field Construction                   Feature Extraction
+─────────────────                ──────────────────                   ─────────────────
+                                                                  ┌─► Amplitude (A)
+                                                                  │
+Raw Data ─► FFT ─► {γₖ} ─► w(γₖ)=1/(1+γₖ²) ─► V₀(y)=∑w(γₖ)cos(γₖy) ─┼─► Hilbert ─► Z(y) ─┬─► Phase φ(y) ─► dφ/dy ─► Frequency (F)
+                                                                  │                   │
+                                                                  └─► d²/dy² ─────────┘─► Curvature (C)
+                                                                      
+                                                                      Sliding Window ─► Entropy S(y) ─► E(y)=1-S(y)/max(S)
+                                                                      
+Feature Normalization                Self-Calibration                     Composite Score
+─────────────────────                ────────────────                     ───────────────
+                                                                          
+A(y) ─► A'(y)=A(y)/max|A| ─┐         ┌─► compute I_A ─► w_A=ln(B)-I_A ─┐
+                           │         │                                  │
+C(y) ─► C'(y)=C(y)/max|C| ─┼────────┼─► compute I_C ─► w_C=ln(B)-I_C ─┬┼─► W_total=∑w_X
+                           │         │                                 ││
+F(y) ─► F'(y)=F(y)/max|F| ─┤         ├─► compute I_F ─► w_F=ln(B)-I_F ─┤└─► α_X=4w_X/W_total
+                           │         │                                 │
+E(y) ─► E'(y)=E(y)/max|E| ─┘         └─► compute I_E ─► w_E=ln(B)-I_E ─┘
+                                                                          
+                                                                         ┌─── α_A, A'(y)
+                                                                         │
+                                                                         ├─── α_C, C'(y)        SEFA(y)=exp[∑α_X·ln(X'(y)+ε)]
+                                                                         │                            ▲
+                                                                         ├─── α_F, F'(y) ─────────────┘
+                                                                         │
+                                                                         └─── α_E, E'(y)
+
+Physical Applications
+───────────────────
+                                                           ┌──► Wave Equation: v(y)=v₀/(1+β·SEFA(y))
+                                                           │
+SEFA(y) ─────────────────────────────────────────────────┤
+                                                           │    
+                                                           └──► Quantum Mechanics: V(r)=V₀(r)+λ·SEFA(r)
+```
+
 ## Key Features
 
 *   **Self-Calibrating:** No hand-tuned parameters. Weights, thresholds, and window sizes are derived directly from the data itself using information theory.
