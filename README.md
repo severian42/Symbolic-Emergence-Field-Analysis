@@ -6,8 +6,6 @@
 
 ---
 
-**(Author: Beckett Dillon)**
-
 *This repository contains the code, data, and documentation for Symbolic Emergence Field Analysis (SEFA), a framework I developed for detecting and quantifying emergent structure in complex systems.*
 
 ---
