@@ -242,30 +242,105 @@ To apply SEFA to your specific problem:
 Consider a time series with complex, multi-scale patterns:
 
 ```python
-# Example adaptation for time series analysis
+# Example adaptation for time series analysis using the SEFA class
 import numpy as np
-from scipy.fft import fft
+from scipy.fft import rfft, rfftfreq # Use real FFT for real data
+from scipy.signal import find_peaks
+from sefa_code.sefa import SEFA, SEFAConfig # Import the actual SEFA components
 
-# 1. Extract spectral drivers from your time series
-data = your_time_series_data
-spectrum = fft(data)
-gamma_values = np.abs(spectrum[:len(spectrum)//2])
-top_k_indices = np.argsort(gamma_values)[-config["num_zeros"]:]
-gamma_drivers = top_k_indices  # These are your frequency components
+# --- Configuration ---
+# 0. Define SEFA configuration (optional, defaults can be used)
+config = SEFAConfig(
+    # Add any specific configurations needed for time series if different from defaults
+    # e.g., p_features, entropy_window_size might need tuning
+    p_features=5,         # Example: Number of features (adjust as needed)
+    entropy_window_size=21 # Example: Window size (adjust based on data characteristics)
+)
+NUM_DRIVERS = 10 # Example: Number of top frequency components to use as drivers
 
-# 2. Set up appropriate domain mapping
-y_grid = np.linspace(0, len(data), config["grid_points"])
+# --- Data Preparation ---
+# 1. Generate or load your time series data
+sampling_rate = 100 # Hz (Example)
+duration = 10       # seconds (Example)
+time = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
+# Example: A signal with a few dominant frequencies + noise
+signal = (np.sin(2 * np.pi * 5 * time) +
+          0.5 * np.sin(2 * np.pi * 15 * time) +
+          0.3 * np.sin(2 * np.pi * 30 * time) +
+          0.5 * np.random.randn(len(time)))
+your_time_series_data = signal
 
-# 3. Configure and run SEFA
-from lore_demo import compute_forcing_field, calculate_lore_fields, compute_selfcal_lore_score
+# 2. Extract spectral drivers (frequencies) using FFT
+yf = rfft(your_time_series_data)
+xf = rfftfreq(len(your_time_series_data), 1 / sampling_rate) # Get the frequencies
+# Select top K frequencies based on amplitude as drivers
+spectrum_amplitudes = np.abs(yf)
+# Exclude 0 Hz component if desired
+top_k_indices = np.argsort(spectrum_amplitudes[1:])[-NUM_DRIVERS:] + 1
+drivers_gamma = xf[top_k_indices] # Frequencies are the drivers
 
-V0_y = compute_forcing_field(gamma_drivers, y_grid, 'lorentz')
-fields = calculate_lore_fields(y_grid, V0_y, entropy_window, entropy_bins)
-symbolic_score, details = compute_selfcal_lore_score(*fields[:3], y_grid)
+print(f"Using top {NUM_DRIVERS} frequencies as drivers: {np.round(drivers_gamma, 2)}")
 
-# 4. Find and interpret significant regions
-peak_indices = find_peaks(symbolic_score)[0]
-significant_times = y_grid[peak_indices]
+# 3. Define the domain for analysis (map to time points)
+ymin = time[0]
+ymax = time[-1]
+num_points = len(your_time_series_data) # Analyze at the original time resolution
+
+# --- SEFA Analysis ---
+# 4. Initialize and Run SEFA Pipeline
+sefa_analyzer = SEFA(config=config)
+sefa_analyzer.run_pipeline(
+    drivers_gamma=drivers_gamma,
+    ymin=ymin,
+    ymax=ymax,
+    num_points=num_points
+)
+
+# 5. Get Results
+results = sefa_analyzer.get_results()
+sefa_score = results['sefa_score']
+processed_domain_y = results['processed_domain_y'] # This corresponds to the time points
+
+# --- Interpretation ---
+# 6. Find and interpret significant regions (e.g., using peak finding)
+# Find peaks in the SEFA score - adjust prominence/height as needed
+peaks, properties = find_peaks(sefa_score, prominence=np.std(sefa_score)) # Example threshold
+significant_times = processed_domain_y[peaks]
+peak_scores = sefa_score[peaks]
+
+print(f"\nFound {len(significant_times)} significant time points:")
+for t, s in zip(significant_times, peak_scores):
+    print(f"  Time: {t:.3f} s, SEFA Score: {s:.4f}")
+
+# Optional: Use SEFA's built-in thresholding
+# mask = sefa_analyzer.threshold_score(method='percentile', percentile=98)
+# significant_times_thresh = processed_domain_y[mask]
+# print(f"\nFound {len(significant_times_thresh)} points above 98th percentile threshold.")
+
+# --- Plotting (Optional Example) ---
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-v0_8-darkgrid')
+fig, ax1 = plt.subplots(figsize=(14, 7))
+
+# Plot original signal
+color = 'tab:grey'
+ax1.set_xlabel('Time (s)')
+ax1.set_ylabel('Original Signal', color=color)
+ax1.plot(time, your_time_series_data, color=color, alpha=0.6, label='Original Signal')
+ax1.tick_params(axis='y', labelcolor=color)
+
+# Plot SEFA score on a secondary axis
+ax2 = ax1.twinx()
+color = 'tab:red'
+ax2.set_ylabel('SEFA Score', color=color)
+ax2.plot(processed_domain_y, sefa_score, color=color, label='SEFA Score')
+ax2.scatter(significant_times, peak_scores, color='black', marker='o', s=50, zorder=10, label=f'Significant Peaks ({len(significant_times)})')
+ax2.tick_params(axis='y', labelcolor=color)
+
+fig.tight_layout()
+fig.legend(loc='upper right', bbox_to_anchor=(0.95, 0.95))
+plt.title('SEFA Analysis of Time Series Data')
+plt.show()
 ```
 
 ## Integration with Machine Learning
