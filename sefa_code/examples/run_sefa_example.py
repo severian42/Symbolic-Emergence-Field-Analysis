@@ -16,12 +16,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-# --- End Add ---
 
-# --- Standard Library Imports Already Above ---
-
-# --- Third-Party Imports ---
-# These packages are now required
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx 
@@ -34,14 +29,10 @@ from pyvis.network import Network
 from sefa import SEFA, SEFAConfig, SavgolParams # Direct import
 
 # --- Configure logging --- 
-# Moved up slightly for clarity, configured early
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 logger.info("Required libraries (numpy, matplotlib, networkx, numba, plotly, pyvis) imported.")
 logger.info("SEFA library imported from local path.")
-
-# Numba is required, remove dummy decorator and availability check
-# We assume njit is always available from the import above
 
 # Rydberg constant in eV
 RYDBERG_CONSTANT_EV = 13.6
@@ -54,7 +45,7 @@ def generate_hydrogen_levels(n_max: int) -> np.ndarray:
     # E_n = -R_H / n^2
     energy_levels = -RYDBERG_CONSTANT_EV / (n_values**2)
     # The levels are naturally sorted from most negative (n=1) to closer to 0
-    return energy_levels # Already sorted
+    return energy_levels 
 
 def create_output_dir(base_dir="sefa_outputs"):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -69,7 +60,7 @@ def save_plot(fig, path):
     fig.savefig(path, bbox_inches='tight')
 
 def save_config(config, path):
-    # Save config as JSON
+
     with open(path, 'w') as f:
         json.dump(config.__dict__, f, indent=2, default=str)
 
@@ -142,8 +133,6 @@ def build_visibility_graph(y_values: np.ndarray, series_data: np.ndarray, featur
     Returns:
         A NetworkX graph, or None if networkx is not available.
     """
-    # if not NETWORKX_AVAILABLE:
-    #     return None
 
     n = len(y_values)
     if n != len(series_data):
@@ -159,8 +148,7 @@ def build_visibility_graph(y_values: np.ndarray, series_data: np.ndarray, featur
     
     G = nx.Graph()
 
-    # --- Add nodes with attributes (Fast, no parallel needed) ---
-    # (This part is usually fast, no Numba needed here)
+    # --- Add nodes with attributes ---
     for i in range(n):
         # Ensure values are standard Python floats for JSON compatibility if saving graph attributes later
         node_attrs = {
@@ -185,9 +173,9 @@ def build_visibility_graph(y_values: np.ndarray, series_data: np.ndarray, featur
         node_attrs = {k: v for k, v in node_attrs.items() if v is not None}
         G.add_node(i, **node_attrs)
 
-    # --- Add edges based on visibility (Parallelized) ---
+    # --- Add edges based on visibility ---
     all_edges = []
-    num_workers = os.cpu_count() # Use available CPU cores
+    num_workers = os.cpu_count() 
     logger.info(f"Calculating visibility using {num_workers} worker processes...")
 
     # Use ProcessPoolExecutor for CPU-bound Numba tasks
@@ -214,7 +202,7 @@ def build_visibility_graph(y_values: np.ndarray, series_data: np.ndarray, featur
             except Exception as exc:
                 logger.error(f'Node {node_i} generated an exception during visibility check: {exc}', exc_info=True) # Log traceback
 
-    # Add all collected edges to the graph at once (faster than adding one by one)
+    # Add all collected edges to the graph at once
     if all_edges:
         G.add_edges_from(all_edges)
     else:
@@ -230,9 +218,6 @@ def plot_graph_3d(G: nx.Graph, out_path: str):
     Nodes positioned by (y_value, sefa_score, 0), colored by degree.
     Requires Matplotlib 3D toolkit.
     """
-    # if not NETWORKX_AVAILABLE:
-    #     print("NetworkX not available, skipping graph plot.")
-    #     return
         
     if G is None:
         print("Graph object is None, skipping plot.")
@@ -247,7 +232,6 @@ def plot_graph_3d(G: nx.Graph, out_path: str):
     logger.info("Generating 3D graph plot (basic)... ")
 
     # Node positions: use y_value and sefa_score for X, Y, set Z=0 initially
-    # Alternatively, use a 3D layout algorithm if needed.
     pos = {}
     scores = []
     valid_nodes = []
@@ -319,9 +303,6 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
     Nodes positioned by (y_value, sefa_score), colored and sized by degree.
     Saves the plot as an HTML file.
     """
-    # if not PLOTLY_AVAILABLE:
-    #     logger.warning("Plotly not available, skipping interactive Plotly graph generation.")
-    #     return
     
     if G is None:
         logger.warning("Graph object is None, skipping interactive Plotly graph generation.")
@@ -340,7 +321,7 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
         logger.warning("No valid node positions (y_value, sefa_score) found for Plotly plot.")
         return
         
-    valid_nodes = list(pos.keys()) # Nodes that have position data
+    valid_nodes = list(pos.keys())
     degrees = dict(G.degree(valid_nodes))
     max_degree = max(degrees.values()) if degrees else 1
     min_degree = min(degrees.values()) if degrees else 0
@@ -354,7 +335,7 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
         if edge[0] in pos and edge[1] in pos:
             x0, y0 = pos[edge[0]]
             x1, y1 = pos[edge[1]]
-            edge_x.extend([x0, x1, None]) # None separates line segments
+            edge_x.extend([x0, x1, None])
             edge_y.extend([y0, y1, None])
 
     edge_trace = go.Scatter(
@@ -392,7 +373,7 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
         text=node_text,
         marker=dict(
             showscale=True,
-            colorscale='Viridis', # Same as matplotlib 3D plot
+            colorscale='Viridis', 
             reversescale=False,
             color=norm_degrees,
             size=node_sizes,
@@ -411,9 +392,9 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
     # --- Create Figure --- 
     fig = go.Figure(data=[edge_trace, node_trace],
                  layout=go.Layout(
-                    title=dict( # Use dict for title properties
+                    title=dict( 
                         text='Interactive SEFA Visibility Graph (Plotly)',
-                        font=dict(size=16) # Set font size here
+                        font=dict(size=16) 
                     ),
                     showlegend=False,
                     hovermode='closest',
@@ -425,7 +406,7 @@ def plot_graph_plotly(G: nx.Graph, out_path: str):
                         x=0.005, y=-0.002 ) ],
                     xaxis=dict(title='Domain (y)', showgrid=True, zeroline=False, showticklabels=True),
                     yaxis=dict(title='SEFA Score', showgrid=True, zeroline=False, showticklabels=True),
-                    plot_bgcolor='white' # Set background color
+                    plot_bgcolor='white' 
                     )\
                  )
     
@@ -442,9 +423,6 @@ def plot_graph_2d_static(G: nx.Graph, out_path: str):
     Nodes positioned by (y_value, sefa_score), colored and sized by degree.
     Saves the plot as a PNG file.
     """
-    # if not NETWORKX_AVAILABLE:
-    #     logger.warning("NetworkX not available, skipping static 2D graph plot.")
-    #     return
         
     if G is None:
         logger.warning("Graph object is None, skipping static 2D graph plot.")
@@ -482,23 +460,23 @@ def plot_graph_2d_static(G: nx.Graph, out_path: str):
     # Draw edges
     nx.draw_networkx_edges(
         G, pos, 
-        nodelist=valid_nodes, # Only draw edges connected to valid nodes
+        nodelist=valid_nodes, 
         ax=ax, 
         edge_color="gray", 
-        alpha=0.05, # Significantly reduce edge alpha
+        alpha=0.05, 
         width=0.5
     )
 
     # Draw nodes
     nodes = nx.draw_networkx_nodes(
         G, pos, 
-        nodelist=valid_nodes, # Only draw nodes with positions
+        nodelist=valid_nodes, 
         ax=ax, 
         node_size=node_sizes, 
         node_color=node_colors,
         cmap=cmap,
-        alpha=0.9, # Slightly transparent
-        linewidths=0.5, # Edge width for nodes
+        alpha=0.9, 
+        linewidths=0.5, 
         edgecolors='black'
     )
     
@@ -521,9 +499,6 @@ def plot_graph_2d_static(G: nx.Graph, out_path: str):
 
 def save_interactive_graph_html(G: nx.Graph, out_path: str):
     """Saves the graph as an interactive HTML file using pyvis."""
-    # if not PYVIS_AVAILABLE:
-    #     logger.warning("Pyvis not available, skipping interactive HTML graph generation.")
-    #     return
 
     if G is None:
         logger.warning("Graph object is None, skipping interactive HTML generation.")
@@ -587,7 +562,7 @@ def save_interactive_graph_html(G: nx.Graph, out_path: str):
             'title': title,
             'size': node_size,
             'color': node_color,
-            'physics': True # Allow physics simulation
+            'physics': True 
         })
         
     # Add nodes using add_nodes which is faster for many nodes
@@ -636,7 +611,7 @@ def run_example():
         
     y_min = drivers.min() - padding
     y_max = drivers.max() + padding # Max energy is close to 0
-    M = 2500 # Number of points - FURTHER REDUCED FOR DEMO SPEED
+    M = 2500 # Number of points - REDUCED FOR DEMO SPEED
     logger.info(f"Domain set to: [{y_min:.4f}, {y_max:.4f}] with {M} points")
     logger.info(f"Using {len(drivers)} Hydrogen energy levels as drivers (gamma_k).")
 
@@ -676,7 +651,7 @@ def run_example():
     sefa_score = results['sefa_score']
     processed_domain_y = results['processed_domain_y']
     # Fetch the indices corresponding to the processed data points
-    processed_indices = results['processed_indices'] # Use the correct key
+    processed_indices = results['processed_indices']
     # Get the original full domain and field for separate plotting
     field_V0_full = results['field_V0']
     domain_y_full = results['domain_y']
@@ -721,9 +696,9 @@ def run_example():
     print(f"  - Std Dev: {np.std(sefa_score):.4g}")
 
     # 5. Thresholding and Symbol Detection
-    # thresholding_method = 'otsu' # Example: use Otsu
-    thresholding_method = 'percentile' # Changed to percentile
-    threshold_percentile = 95         # Set percentile level
+    # thresholding_method = 'otsu'
+    thresholding_method = 'percentile' 
+    threshold_percentile = 95
     threshold = np.nan
     mask = None
     symbol_locs = np.array([])
@@ -764,7 +739,7 @@ def run_example():
     # Increase figure height for 4 panels
     fig, axes = plt.subplots(4, 1, figsize=(12, 18), sharex=True)
 
-    # --- Plot 1: Drivers and Weights (NEW) ---
+    # --- Plot 1: Drivers and Weights ---
     ax0 = axes[0]
     line_drivers = ax0.stem(drivers, weights, linefmt='C0-', markerfmt='C0o', basefmt=' ', label='Driver Weights')
     ax0.set_ylabel('SEFA Weight ($w_k$)')
@@ -777,7 +752,7 @@ def run_example():
     ax0.grid(True, linestyle='--', alpha=0.5)
     ax0.legend(loc='upper right')
 
-    # --- Plot 2: V0 and SEFA Score (Previously Plot 1) --- 
+    # --- Plot 2: V0 and SEFA Score --- 
     ax1 = axes[1] # Now axes[1]
     ax1_twin = ax1.twinx()
 
@@ -825,7 +800,7 @@ def run_example():
     if scatter_sym: handles.append(scatter_sym); labels.append(scatter_sym.get_label())
     ax1_twin.legend(handles, labels, loc='upper right')
 
-    # --- Plot 3: Geometric Features (A, C, F) (Previously Plot 2) --- 
+    # --- Plot 3: Geometric Features (A, C, F) --- 
     ax2 = axes[2] # Now axes[2]
     ax2_twin = ax2.twinx()
 
@@ -862,7 +837,7 @@ def run_example():
     geom_labels = [h.get_label() for h in geom_handles]
     if geom_handles: ax2_twin.legend(geom_handles, geom_labels, loc='upper right')
 
-    # --- Plot 4: Entropy Features (S, E) (Previously Plot 3) --- 
+    # --- Plot 4: Entropy Features (S, E) --- 
     ax3 = axes[3] # Now axes[3]
     ax3_twin = ax3.twinx()
 
@@ -955,15 +930,15 @@ def run_example():
         static_2d_plot_path = os.path.join(out_dir, "sefa_visibility_graph_2d_static.png")
         plot_graph_2d_static(visibility_graph, static_2d_plot_path)
         
-        # --- New: Plot Interactive Plotly Graph ---
+        # --- Plot Interactive Plotly Graph ---
         plotly_plot_path = os.path.join(out_dir, "sefa_visibility_graph_plotly.html")
         plot_graph_plotly(visibility_graph, plotly_plot_path)
 
         # Generate interactive HTML graph if pyvis is available
-        # --- Re-enable the Pyvis plot generation ---
+        # --- Pyvis plot generation ---
         html_path = os.path.join(out_dir, "sefa_visibility_graph_interactive.html")
         save_interactive_graph_html(visibility_graph, html_path)
-        # --- End Re-enable ---
+        # --- End ---
     else:
          logger.warning("Visibility graph could not be built.")
 
