@@ -99,7 +99,7 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 
 **(Important Note:** SEFA is **not** a primality test, nor an attempt to prove the Riemann Hypothesis. It's an exploratory tool for quantifying emergent structure correlated with arithmetic properties.)
 
-*   For a detailed summary of the experiment and results, see `LORE BRIEF.md`.
+*   For a detailed summary of the experiment and results, see `L.O.R.E_Paper.md`.
 *   Raw output files and plots are in the `lore_standalone_results/` directory.
 *   The full mathematical derivation is in `SEFA.md`.
 *   A derivation exploring physical interpretations (wavefront shift, quantum energy shift) is in `SEFA_IGS.md`.
@@ -109,13 +109,13 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 *   `README.md`: This file.
 *   `SEFA.md`: The core mathematical derivation of the SEFA framework from first principles.
 *   `SEFA_IGS.md`: Derivation exploring potential Informational Geometry / Physics interpretations.
-*   `LORE BRIEF.md`: A summary paper outlining the motivation, method, and results of the zeta/prime experiment (LORE was the internal project name).
+*   `L.O.R.E_Paper.md`: A summary paper outlining the motivation, method, and results of the zeta/prime experiment (LORE was the internal project name).
 *   `LORE FAQs.md`: Frequently asked questions about the LORE/SEFA concept and experiment.
 *   `lore_demo.py`: A Python script demonstrating the core SEFA pipeline applied to the zeta zero data.
 *   `lore_config.json`: Configuration file for `lore_demo.py`, allowing adjustment of parameters (domain, number of zeros, etc.). *Note: Weights can be set here, but self-calibration is default.*
 *   `zetazeros-50k.txt`: Text file containing the imaginary parts of the first 50,000 non-trivial zeta zeros (sourced from standard mathematical libraries/repositories).
 *   `lore_standalone_results/`: Directory containing output files (plots, data summaries, network graphs) from a sample run of `lore_demo.py`.
-*   `lore_ml_model.py`: (Experimental) Contains code exploring potential machine learning integrations or comparisons with SEFA features. Use with caution, less validated than the core SEFA pipeline.
+*   `sefa_ml_model.py`: (Experimental) Contains code exploring potential machine learning integrations or comparisons with SEFA features.
 
 ## Getting Started
 
@@ -129,9 +129,9 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 *   Scikit-learn (for metrics like AUROC, AP)
 *   Pandas (for data handling in demo)
 
-You can typically install these using pip:
+You can install these using pip:
 ```bash
-pip install numpy scipy matplotlib sympy scikit-learn pandas
+pip install requirements.txt
 ```
 
 ### Running the Demo
