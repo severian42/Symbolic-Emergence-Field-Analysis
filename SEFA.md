@@ -43,30 +43,45 @@ Input: Field domain [ymin, ymax], drivers {γ_k}, M points
 Output: SEFA(y) for all y
 
 1. Discretize domain: dy = (ymax - ymin)/(M-1); y_i = ymin + i*dy (* Use dy for consistency *)
+
 2. Compute weights: w[k] = 1/(1 + γ[k]^2)
+
 3. Construct field: V0[y] = Sum[w[k] * Cos[γ[k] * y], {k, 1, K}]
+
 4. Hilbert transform: Use FFT, multiplier h[k] = -I*Sign[k], with h[0]=h[N/2]=0. (* Use I for imaginary unit and * for multiplication *)
-5. Analytic signal: AnalyticSignal[y] = V0[y] + I*HilbertTransform[V0, y] (* Use Mathematica function names *)
+
+5. Analytic signal: AnalyticSignal[y] = V0[y] + I*HilbertTransform[V0, y]
+
 6. Envelope: A[y] = Abs[AnalyticSignal[y]]
-7. Phase: φ[y] = Arg[AnalyticSignal[y]] (* Use Greek φ; Unwrap phase as needed *)
+
+7. Phase: φ[y] = Arg[AnalyticSignal[y]] 
 8. Frequency: F[y] = D[φ[y], y] (* Finite difference: (φ[i+1]-φ[i-1])/(2*dy) *)
+
 9. Curvature: C[y] = D[A[y], {y, 2}] (* Finite difference: (A[i+1]-2*A[i]+A[i-1])/(dy^2) *)
+
 10. Entropy: S[y] = -Sum[q[j]*Log[q[j]], {j, 1, B}]
     - Use adaptive binning (e.g., Knuth) for q_j in the sliding window.
     - Limitation (2.2): Consider alternatives for W < 50.
+
 11. Entropy alignment: SMax = MaxValue[S[y], y]; E[y] = 1 - S[y]/SMax
+
 12. For each feature X ∈ {A, C, F, E}:
     a. Normalize: XPrime[y] = X[y] / MaxValue[Abs[X[y]], y]
     b. Calculate Information Deficit for XPrime:
        Compute global distribution of XPrime using adaptive bins to get q_j.
        Ix = -Sum[q[j]*Log[q[j]], {j, 1, B}]
        w[X] = Max[0, Log[B] - Ix]    (* Deficit for feature X; clamped to ≥0 to prevent negative exponents that would flip the contribution into a penalty — see Limitation 2.3 *)
+
 13. Calculate total deficit: WTotal = Total[Table[w[X], {X, {A, C, F, E}}]] (* Use WTotal *)
+
 14. Calculate Exponents:
     Alpha[X_] := p * w[X] / WTotal (* p = number of features (typically 4), updated to use w[X] *)
+
 15. Define regularization constant: epsilon = 10^-16
+
 16. SEFA score: LogSEFA[y_] := Sum[Alpha[X] * Log[Max[ε, X_prime[X][y]]], {X, {A, C, F, E}}] (* Use LogSEFA, Alpha; Natural Logarithm (ln) *)
        SEFAScore[y_] := Exp[LogSEFA[y]] (* Use SEFAScore, LogSEFA *)
+
 17. Threshold: Use Otsu, percentile, or mixture model; report all and justify choice
 ```
 
