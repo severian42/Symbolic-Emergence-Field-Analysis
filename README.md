@@ -224,7 +224,7 @@ To apply SEFA to your specific problem:
 
 ### Data Science and Machine Learning
 - **Anomaly Detection**: Identify unusual patterns in high-dimensional data
-- **Feature Engineering**: Use SEFA as a preprocessor for ML models (see `sefa_ml_model.py`)
+- **Feature Engineering**: Use SEFA as a full SciKit ML model or even just a preprocessor for other ML models (see `sefa_ml_model.py`)
 - **Clustering Enhancement**: Improve cluster detection by focusing on high-SEFA regions
 
 ### Biological Systems
@@ -347,7 +347,7 @@ plt.show()
 
 The `sefa_ml_model.py` file provides scikit-learn compatible components that allow you to:
 
-1. Use SEFA as a feature extractor in ML pipelines
+1. Use SEFA as a full ML model or even just a feature extractor in other ML pipelines
 2. Train models to recognize patterns with SEFA characteristics
 3. Create hybrid systems that combine traditional and SEFA-based approaches
 
