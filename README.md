@@ -111,8 +111,7 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 *   `SEFA_IGS.md`: Derivation exploring potential Informational Geometry / Physics interpretations.
 *   `L.O.R.E_Paper.md`: A summary paper outlining the motivation, method, and results of the zeta/prime experiment (LORE was the internal project name).
 *   `LORE FAQs.md`: Frequently asked questions about the LORE/SEFA concept and experiment.
-*   `lore_demo.py`: A Python script demonstrating the core SEFA pipeline applied to the zeta zero data.
-*   `lore_config.json`: Configuration file for `lore_demo.py`, allowing adjustment of parameters (domain, number of zeros, etc.). *Note: Weights can be set here, but self-calibration is default.*
+*   `lore_demo.py`: A Python script demonstrating the core SEFA pipeline applied to the zeta zero data. Configuration for `lore_demo.py` is found at within the main run execution, allowing adjustment of parameters (domain, number of zeros, etc.). *Note: Weights can be set here, but self-calibration is default.*
 *   `zetazeros-50k.txt`: Text file containing the imaginary parts of the first 50,000 non-trivial zeta zeros (sourced from standard mathematical libraries/repositories).
 *   `lore_standalone_results/`: Directory containing output files (plots, data summaries, network graphs) from a sample run of `lore_demo.py`.
 *   `sefa_ml_model.py`: (Experimental) Contains code exploring potential machine learning integrations or comparisons with SEFA features.
