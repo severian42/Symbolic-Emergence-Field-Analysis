@@ -3,10 +3,8 @@
 **Quantifying the Hidden Geometry of Emergence in Complex Data**
 
 ![SEFA Zeta-Prime Field Emergence](https://github.com/user-attachments/assets/f5369c36-2f21-4eda-85bc-5ed359966366)
-**The above image is a real visual output of how Prime numbers emerge and connect through a SEFA field driven purely by Zeta Zeros**
----
 
-*This repository contains the code, data, and documentation for Symbolic Emergence Field Analysis (SEFA), a computational framework for detecting and quantifying emergent structure in complex systems.*
+#### **The above image is a real visual output of how Prime numbers emerge and connect through a SEFA field driven purely by Zeta Zeros**
 
 ---
 
