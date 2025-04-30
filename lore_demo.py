@@ -699,13 +699,13 @@ if __name__ == '__main__':
         # --- LORE Algorithm Parameters ---
         "entropy_window": 100,           # Window size (points) for local entropy
         "entropy_bins": 15,             # Number of bins for entropy histogram
-        "weights": {                    # Weights for LORE score components
-            'envelope': 0.9,
-            'curvature': 3.5,
-            'frequency': 0.9,
-            'entropy': 3.5,
-            'energy': 0.5
-        },
+#        "weights": {                    # Note: Weights can be set here, but self-calibration is default.
+#            'envelope': 0.9,
+#            'curvature': 3.5,
+#            'frequency': 0.9,
+#            'entropy': 3.5,
+#            'energy': 0.5
+#        },
         "peak_threshold": 0.0,          # Minimum LORE score for a point to be considered a peak
 
         # --- Prediction & Evaluation Parameters ---
