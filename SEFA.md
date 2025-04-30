@@ -386,7 +386,7 @@ These controls strongly suggest that the SEFA framework, when driven by zeta zer
 
 **IV.5. Reproducibility**
 
-The results are reproducible using the provided code (`lore_demo.py`, adapted for SEFA terminology) and data (`zetazeros-50k.txt`). (Code available in Supplementary File 1, submitted separately). The self-calibrating nature of the framework ensures objectivity by eliminating manual parameter tuning.
+The results are reproducible using the provided code (`lore_demo.py`, adapted for SEFA terminology) and data (`zetazeros-50k.txt`). (Code available at https://github.com/severian42/Symbolic-Emergence-Field-Analysis). The self-calibrating nature of the framework ensures objectivity by eliminating manual parameter tuning.
 
 ---
 
@@ -424,7 +424,7 @@ This derivation reconstructs the entropy field algorithm from first principles, 
 ## References
 - S. Amari, "Information Geometry and Its Applications," Springer, 2016.
 - R. Bracewell, "The Fourier Transform and Its Applications," 3rd Ed., McGraw-Hill, 2000.
-- Beckett Dillon, "Logical Resonance Extractor (LORE): A Self-Calibrating Framework for Emergent Symbolic Structure," arXiv:2302.12345 (2023). [https://arxiv.org/abs/2302.12345]
+- Beckett Dillon, "Logical Resonance Extractor (LORE): A Self-Calibrating Framework for Emergent Symbolic Structure," 
 - B. Gdeisat, D. Burton, M. Lalor, and F. Lilley, "Phase Unwrapping Algorithm Based on Wavelet Transform," Optics Communications, 235(1–3):57–69, 2004.
 - D. Ghiglia and M. Pritt, "Two-Dimensional Phase Unwrapping: Theory, Algorithms, and Software," Wiley, 1998.
 - B. Hahn, "Hilbert Transforms in Signal Processing," 2nd Ed., Springer, 1996.
