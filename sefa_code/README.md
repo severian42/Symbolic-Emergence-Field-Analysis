@@ -32,8 +32,14 @@ The implementation is organized into the following key modules:
 ## Usage Example
 
 ```python
+import sys
+import os
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import numpy as np
-from sefa import SEFA, SEFAConfig # Import main class and config
+from sefa_code.sefa import SEFA, SEFAConfig # Import main class and config
 
 # 1. Define Drivers and Domain Parameters
 drivers_gamma = np.array([-13.6, -3.4, -1.51]) # Example: First 3 Hydrogen levels (eV)
