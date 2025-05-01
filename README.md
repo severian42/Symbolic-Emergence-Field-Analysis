@@ -35,42 +35,114 @@ What distinguishes SEFA from other pattern-detection methods is its transparency
 **Here is the logic and math flow of SEFA:**
 
 ```ascii
-Driver Extraction                Field Construction                   Feature Extraction
-─────────────────                ──────────────────                   ─────────────────
-                                                                  ┌─► Amplitude (A)
-                                                                  │
-Raw Data ─► FFT ─► {γₖ} ─► w(γₖ)=1/(1+γₖ²) ─► V₀(y)=∑w(γₖ)cos(γₖy) ─┼─► Hilbert ─► Z(y) ─┬─► Phase φ(y) ─► dφ/dy ─► Frequency (F)
-                                                                  │                   │
-                                                                  └─► d²/dy² ─────────┘─► Curvature (C)
-                                                                      
-                                                                      Sliding Window ─► Entropy S(y) ─► E(y)=1-S(y)/max(S)
-                                                                      
-Feature Normalization                Self-Calibration                     Composite Score
-─────────────────────                ────────────────                     ───────────────
-                                                                          
-A(y) ─► A'(y)=A(y)/max|A| ─┐         ┌─► compute I_A ─► w_A=ln(B)-I_A ─┐
-                           │         │                                  │
-C(y) ─► C'(y)=C(y)/max|C| ─┼────────┼─► compute I_C ─► w_C=ln(B)-I_C ─┬┼─► W_total=∑w_X
-                           │         │                                 ││
-F(y) ─► F'(y)=F(y)/max|F| ─┤         ├─► compute I_F ─► w_F=ln(B)-I_F ─┤└─► α_X=4w_X/W_total
-                           │         │                                 │
-E(y) ─► E'(y)=E(y)/max|E| ─┘         └─► compute I_E ─► w_E=ln(B)-I_E ─┘
-                                                                          
-                                                                         ┌─── α_A, A'(y)
-                                                                         │
-                                                                         ├─── α_C, C'(y)        SEFA(y)=exp[∑α_X·ln(X'(y)+ε)]
-                                                                         │                            ▲
-                                                                         ├─── α_F, F'(y) ─────────────┘
-                                                                         │
-                                                                         └─── α_E, E'(y)
-
-Physical Applications
-───────────────────
-                                                           ┌──► Wave Equation: v(y)=v₀/(1+β·SEFA(y))
-                                                           │
-SEFA(y) ─────────────────────────────────────────────────┤
-                                                           │    
-                                                           └──► Quantum Mechanics: V(r)=V₀(r)+λ·SEFA(r)
+                       Driver Extraction
+                       ──────────────────
+                               │
+                               ▼
+                           Raw Data
+                               │
+                               ▼
+                              FFT
+                               │
+                               ▼
+                             {γₖ}
+                               │
+                               ▼
+                       w(γₖ)=1/(1+γₖ²)
+                               │
+                        Field Construction
+                       ───────────────────
+                               │
+                               ▼
+                    V₀(y)=∑w(γₖ)cos(γₖy)
+                               │
+                        Feature Extraction
+                       ───────────────────
+                               │
+            ┌────────────┬─────┴─────┬────────────┐
+            │            │           │            │
+            ▼            ▼           ▼            │
+       Amplitude(A)    Hilbert    d²/dy²     Sliding Window
+                         │           │            │
+                         ▼           │            ▼
+                        Z(y)         │        Entropy S(y)
+                         │           │            │
+                    ┌────┴────┐      │            ▼
+                    │         │      │      E(y)=1-S(y)/max(S)
+                    ▼         ▼      │            │
+               Phase φ(y)     └──────┼────►Curvature(C)
+                    │                │            │
+                    ▼                │            │
+                  dφ/dy              │            │
+                    │                │            │
+                    ▼                │            │
+              Frequency(F)           │            │
+                    │                │            │
+                    │                │            │
+                    │      Feature Normalization  │
+                    │     ─────────────────────   │
+                    │               │             │
+            ┌───────┼────────┬──────┘             │
+            │       │        │                    │
+            ▼       ▼        ▼                    ▼
+ F'(y)=F(y)/max|F|  │  C'(y)=C(y)/max|C|   E'(y)=E(y)/max|E|
+            │       │        │                    │
+            │       ▼        │                    │
+            │  A'(y)=A(y)/max|A|                  │
+            │       │        │                    │
+            │       │        │                    │
+            │       │  Self-Calibration           │
+            │       │ ────────────────            │
+            │       │        │                    │
+       ┌────┼───────┼────────┼────────────────────┘
+       │    │       │        │
+       │    │       │        │
+       ▼    ▼       ▼        ▼
+compute I_F compute I_A compute I_C compute I_E
+       │    │       │        │
+       ▼    ▼       ▼        ▼
+w_F=ln(B)-I_F  │  w_C=ln(B)-I_C  w_E=ln(B)-I_E
+       │    │       │        │
+       │    ▼       │        │
+       │w_A=ln(B)-I_A        │
+       │    │       │        │
+       │    │       │        │
+       └────┼───────┼────────┘
+            │       │        │
+            ▼       ▼        ▼
+                 W_total=∑w_X
+                      │
+                      ▼
+              α_X=4w_X/W_total
+                      │
+                      │
+              Composite Score
+             ───────────────
+                      │
+        ┌─────────────┼─────────────┐
+        │             │             │
+        ▼             ▼             ▼
+     α_A, A'(y)    α_C, C'(y)    α_F, F'(y)
+        │             │             │
+        │             │             │
+        │             │             │
+        └─────────────┼─────────────┘
+                      │
+                      ▼
+                   α_E, E'(y)
+                      │
+                      ▼
+         SEFA(y)=exp[∑α_X·ln(X'(y)+ε)]
+                      │
+                      │
+             Physical Applications
+            ───────────────────
+                      │
+        ┌─────────────┴──────────────┐
+        │                            │
+        ▼                            ▼
+Wave Equation:               Quantum Mechanics: 
+v(y)=v₀/(1+β·SEFA(y))        V(r)=V₀(r)+λ·SEFA(r)
 ```
 
 ## Key Features
