@@ -339,13 +339,50 @@ Multiplying several normalized, unit-less features can lead to rapid shrinkage a
 
 ## III. Micro-Example: Full Walkthrough
 
-**Given:**  
-- γ = {2, 5}, y ∈ [0, π], M = 5
-- Compute V₀(yᵢ), Hilbert transform, amplitude, frequency, curvature, entropy, and SEFA score step by step as above.
+**Given:**
+- **Drivers (Wavenumbers in cm⁻¹):**
+  - H-alpha (n=3→2): γ₁ ≈ 15233 cm⁻¹
+  - H-beta (n=4→2): γ₂ ≈ 20565 cm⁻¹
+  - H-gamma (n=5→2): γ₃ ≈ 23032 cm⁻¹
+  Let γ = {15233, 20565, 23032}.
+- **Domain:** We need a domain `y` such that `γₖ * y` spans a few cycles. Let's choose `y ∈ [0, 1e-6]` (conceptually related to cm).
+- **Discretization:** For illustration, use M = 5 points.
+  - `dy = (1e-6 - 0) / (5 - 1) = 0.25e-6`
+  - `yᵢ = {0, 0.25e-6, 0.5e-6, 0.75e-6, 1e-6}`
 
-**Step-by-step calculations:**  
-- See above micro-examples for each feature.
-- For each yᵢ, explicitly compute all intermediate values.
+**Step-by-step Illustration:**
+
+1.  **Calculate Weights (wₖ = 1 / (1 + γₖ²)):**
+    - `w₁ = 1 / (1 + 15233²) ≈ 4.31e-9`
+    - `w₂ = 1 / (1 + 20565²) ≈ 2.36e-9`
+    - `w₃ = 1 / (1 + 23032²) ≈ 1.88e-9`
+
+2.  **Construct Field V₀(y) = Σ wₖ cos(γₖ y):**
+    - `V₀(y) = w₁ cos(γ₁ y) + w₂ cos(γ₂ y) + w₃ cos(γ₃ y)`
+
+3.  **Calculate V₀ at discretization points (Examples):**
+    - `y₀ = 0`: `cos(0) = 1` for all terms.
+      `V₀(y₀) = w₁ + w₂ + w₃ ≈ (4.31 + 2.36 + 1.88)e-9 ≈ 8.55e-9`
+    - `y₁ = 0.25e-6`:
+      - `γ₁ y₁ = 15233 * 0.25e-6 ≈ 0.003808` radians
+      - `γ₂ y₁ = 20565 * 0.25e-6 ≈ 0.005141` radians
+      - `γ₃ y₁ = 23032 * 0.25e-6 ≈ 0.005758` radians
+      - `cos(γ₁ y₁) ≈ cos(0.003808) ≈ 0.999993`
+      - `cos(γ₂ y₁) ≈ cos(0.005141) ≈ 0.999987`
+      - `cos(γ₃ y₁) ≈ cos(0.005758) ≈ 0.999983`
+      - `V₀(y₁) ≈ w₁*0.999993 + w₂*0.999987 + w₃*0.999983 ≈ 8.55e-9` (Values are very close to V₀(0) because `y` is small).
+
+4.  **Subsequent Steps (Conceptual):**
+    - **Hilbert Transform:** Compute `H[V₀](y)` numerically (e.g., via FFT) across all `yᵢ`. *Requires M >> 5 for accuracy.*
+    - **Analytic Signal:** Form `AnalyticSignal(yᵢ) = V₀(yᵢ) + i * H[V₀](yᵢ)`.
+    - **Features:** Calculate `A(yᵢ)`, `φ(yᵢ)` (unwrapped), `F(yᵢ)`, `C(yᵢ)`, `S(yᵢ)` using numerical derivatives and sliding window entropy (potentially using smoothing/fitting methods as discussed in Limitations 2.2, 2.3). *Requires M >> 5 for reliable derivatives/entropy.*
+    - **Entropy Alignment:** Calculate `E(yᵢ) = 1 - S(yᵢ) / max(S)`.
+    - **Normalization:** Normalize each feature `X` to `X_prime(yᵢ)`.
+    - **Self-Calibration:** Calculate information deficits `wₓ` and exponents `αₓ` from the global distributions of `X_prime`.
+    - **SEFA Score:** Compute `LogSEFA(yᵢ)` and `SEFA(yᵢ) = exp(LogSEFA(yᵢ))` using the formulas from Section II.6, including regularization `ε`.
+    - **Thresholding:** Apply a threshold (e.g., Otsu) to `SEFA(yᵢ)` to identify points of symbolic emergence.
+
+**Note:** This micro-example primarily demonstrates the setup with physical drivers. A meaningful SEFA analysis would require a much larger number of points (M) for accurate numerical computation of transforms, derivatives, and entropy.
 
 ---
 
