@@ -481,7 +481,7 @@ This project is licensed under the **Business Source License 1.1 (BSL 1.1)**.
 
 For more details, see the [LICENSE](https://github.com/severian42/Symbolic-Emergence-Field-Analysis/blob/main/LICENSE.md) file.
 
-The SEFA math and White PAper is licensed under the [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) License - see the LICENSE.md file for details.
+The SEFA math and [White Paper](https://github.com/severian42/Symbolic-Emergence-Field-Analysis/tree/main/SEFA%20White%20Paper) is licensed under the [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) License - see the LICENSE.md file for details.
 
 ## Contact
 
