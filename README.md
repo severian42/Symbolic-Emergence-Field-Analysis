@@ -2,7 +2,8 @@
 
 **Quantifying the Hidden Geometry of Emergence in Complex Data**
 
-![SEFA Zeta-Prime Field Emergence](https://github.com/user-attachments/assets/f5369c36-2f21-4eda-85bc-5ed359966366)
+<img src="https://github.com/user-attachments/assets/1d2237c5-0484-431b-91ed-669b08c3ea4f" alt="SEFA Perspective" width="720">
+
 
 #### **The above image is a real visual output of how Prime numbers emerge and connect through a SEFA field driven purely by Zeta Zeros**
 
@@ -144,6 +145,7 @@ w_F=ln(B)-I_F  │  w_C=ln(B)-I_C  w_E=ln(B)-I_E
 Wave Equation:               Quantum Mechanics: 
 v(y)=v₀/(1+β·SEFA(y))        V(r)=V₀(r)+λ·SEFA(r)
 ```
+<img src="https://github.com/user-attachments/assets/f9dd3e34-3f98-461e-bf47-f5904bd23cd9" alt="Visual" width="720">
 
 ## Key Features
 
@@ -156,6 +158,8 @@ v(y)=v₀/(1+β·SEFA(y))        V(r)=V₀(r)+λ·SEFA(r)
 *   **Reproducible:** The code and data provided allow for full replication of the key experiments.
 
 ## Validation: The Zeta Zero / Prime Number Experiment
+
+<img src="https://github.com/user-attachments/assets/f5369c36-2f21-4eda-85bc-5ed359966366" alt="SEFA Zeta-Prime Field Emergence" width="500">
 
 To test SEFA rigorously, I applied it to one of the most fundamental datasets in mathematics: the non-trivial zeros of the Riemann zeta function. The hypothesis: could SEFA, *without knowing anything about primes*, detect regions correlated with prime numbers simply by analyzing the structure of a field constructed from the zeta zeros?
 
