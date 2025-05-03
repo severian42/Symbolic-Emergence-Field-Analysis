@@ -457,19 +457,14 @@ Remember that SEFA is an exploratory tool - it works best when combined with dom
 
 ---
 
-## Contributing
-
-While this is primarily my personal research framework, I'm open to collaboration and suggestions. Feel free to open issues for bugs or feature ideas. If you wish to contribute code, please open an issue first to discuss the proposed changes.
 
 ## Citation
 
-If you use SEFA or the results from the zeta/prime experiment in your work, please cite this repository and/or the associated `LORE BRIEF.md` document (treating it as a white paper/preprint).
+If you use SEFA or the results from the zeta/prime experiment in your work, please cite this repository and/or the associated documents (treating it as a white paper/preprint) and research codebase.
 
 ```
-Dillon, B. (2025). Symbolic Emergence Field Analysis (SEFA). Available from [https://github.com/[your-username]/sefa](https://github.com/severian42/Symbolic-Emergence-Field-Analysis-SEFA)
+Dillon, B. (2025). Symbolic Emergence Field Analysis (SEFA). Available from [[https://github.com/[your-username]/sefa](https://github.com/severian42/Symbolic-Emergence-Field-Analysis-SEFA)](https://github.com/severian42/Symbolic-Emergence-Field-Analysis)
 ```
-
-## License
 
 ## License
 
@@ -485,6 +480,6 @@ The SEFA math and [White Paper](https://github.com/severian42/Symbolic-Emergence
 
 ## Contact
 
-For questions or discussions, you can reach me at beckettdillon42@gmail.com.
+If you would like to discuss potential commercial licensing for your use case and industry, and for any other questions or discussions, you can reach me at beckettdillon42@gmail.com.
 
 ---
