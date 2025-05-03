@@ -471,7 +471,17 @@ Dillon, B. (2025). Symbolic Emergence Field Analysis (SEFA). Available from [htt
 
 ## License
 
-This project is licensed under the [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) License - see the LICENSE.md file for details.
+## License
+
+This project is licensed under the **Business Source License 1.1 (BSL 1.1)**. 
+
+- **Effective Date**: May 3, 2025
+- **Change Date**: May 3, 2029
+- On the **Change Date**, this project will transition to the **GNU General Public License Version 2.0 or later**.
+
+For more details, see the [LICENSE](https://github.com/severian42/Symbolic-Emergence-Field-Analysis/blob/main/LICENSE.md) file.
+
+The SEFA math and White PAper is licensed under the [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) License - see the LICENSE.md file for details.
 
 ## Contact
 
