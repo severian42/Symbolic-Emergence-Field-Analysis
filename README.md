@@ -1,13 +1,16 @@
+<div align="center">
+
 # Symbolic Emergence Field Analysis (SEFA)
 
 **Quantifying the Hidden Geometry of Emergence in Complex Data**
 
-<div align="center">
+<div>
   <img src="https://github.com/user-attachments/assets/1d2237c5-0484-431b-91ed-669b08c3ea4f" alt="SEFA Perspective" width="512">
 </div>
 
-
 #### **Field-Resolved Symbolic Interference Pattern: a direct representation of SEFA’s latent resonance topology, not stylized, not symbolic, not hyperreal or forced; just the math expressing itself.**
+
+</div>
 
 ---
 
