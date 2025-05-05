@@ -37,7 +37,10 @@ What distinguishes SEFA from other pattern-detection methods is its transparency
 ---
 
 **Here is the logic and math flow of SEFA:**
+<div align="center">
 
+<div>
+  
 ```ascii
                        Driver Extraction
                        ──────────────────
@@ -148,7 +151,11 @@ w_F=ln(B)-I_F  │  w_C=ln(B)-I_C  w_E=ln(B)-I_E
 Wave Equation:               Quantum Mechanics: 
 v(y)=v₀/(1+β·SEFA(y))        V(r)=V₀(r)+λ·SEFA(r)
 ```
+  
 <img src="https://github.com/user-attachments/assets/f9dd3e34-3f98-461e-bf47-f5904bd23cd9" alt="Visual" width="720">
+</div>
+
+</div>
 
 ## Key Features
 
