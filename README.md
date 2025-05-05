@@ -359,7 +359,7 @@ The SEFA (Symbolic Emergence Field Analysis) algorithm, codebase, and all mathem
 - Self-calibrated emergence detection for 1D, 2d, 3d and multi-dimensional time-series
 - The SEFA scoring profile aggregation and symbolic peak analysis
 
-are proprietary intellectual property of BeckettDillon42@gmail.com protected under the Business Source License 1.1 and U.S. copyright law.
+are proprietary intellectual property of Beckett Dillon protected under the CC BY-NC 4.0 and U.S. copyright law.
 
 No portion of this repository, code, or theoretical framework may be used in commercial products, research platforms, or derivative software without a separate, signed commercial license agreement.
 
