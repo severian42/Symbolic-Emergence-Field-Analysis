@@ -5,10 +5,8 @@
 **Quantifying the Hidden Geometry of Emergence in Complex Data**
 
 <div>
-  <img src="https://github.com/user-attachments/assets/1d2237c5-0484-431b-91ed-669b08c3ea4f" alt="SEFA Perspective" width="512">
+  <img src="https://github.com/user-attachments/assets/1cf0706a-941f-4e75-80ce-f013756d0db9" alt="SEFA Perspective" width="512">
 </div>
-
-#### **Field-Resolved Symbolic Interference Pattern: a direct representation of SEFA’s latent resonance topology, not stylized, not symbolic, not hyperreal or forced; just the math expressing itself.**
 
 </div>
 
@@ -181,15 +179,8 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 *   For a detailed summary of the experiment and results, see `L.O.R.E_Paper.md`.
 *   Raw output files and plots are in the `lore_standalone_results/` directory.
 *   The full mathematical derivation is in `SEFA.md`.
-*   A derivation exploring physical interpretations (wavefront shift, quantum energy shift) is in `SEFA_IGS.md`.
 
 ## Repository Contents
-
-*   `README.md`: This file.
-  
-*   `SEFA.md`: The core mathematical derivation of the SEFA framework from first principles.
-
-*   `SEFA_IGS.md`: Derivation exploring potential Informational Geometry / Physics interpretations.
 
 *   `L.O.R.E_Paper.md`: A summary paper outlining the motivation, method, and results of the zeta/prime experiment (LORE was the internal project name).
 
@@ -200,8 +191,6 @@ To test SEFA rigorously, I applied it to one of the most fundamental datasets in
 *   `zetazeros-50k.txt`: Text file containing the imaginary parts of the first 50,000 non-trivial zeta zeros (sourced from standard mathematical libraries/repositories).
 
 *   `lore_standalone_results/`: Directory containing output files (plots, data summaries, network graphs) from a sample run of `lore_demo.py`.
-
-*   `sefa_ml_model.py`: (Experimental) Contains code exploring potential machine learning integrations or comparisons with SEFA features.
 
 ## Getting Started
 
@@ -318,122 +307,6 @@ To apply SEFA to your specific problem:
 - **Economic Time Series**: Detect emergent cycles and structural breaks
 - **Network Analysis**: Find coherent subgraphs in economic/financial networks
 
-## Extended Example: Analyzing Time Series Data
-
-Consider a time series with complex, multi-scale patterns:
-
-```python
-# Example adaptation for time series analysis using the SEFA class
-import numpy as np
-from scipy.fft import rfft, rfftfreq # Use real FFT for real data
-from scipy.signal import find_peaks
-from sefa_code.sefa import SEFA, SEFAConfig # Import the actual SEFA components
-
-# --- Configuration ---
-# 0. Define SEFA configuration (optional, defaults can be used)
-config = SEFAConfig(
-    # Add any specific configurations needed for time series if different from defaults
-    # e.g., p_features, entropy_window_size might need tuning
-    p_features=5,         # Example: Number of features (adjust as needed)
-    entropy_window_size=21 # Example: Window size (adjust based on data characteristics)
-)
-NUM_DRIVERS = 10 # Example: Number of top frequency components to use as drivers
-
-# --- Data Preparation ---
-# 1. Generate or load your time series data
-sampling_rate = 100 # Hz (Example)
-duration = 10       # seconds (Example)
-time = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
-# Example: A signal with a few dominant frequencies + noise
-signal = (np.sin(2 * np.pi * 5 * time) +
-          0.5 * np.sin(2 * np.pi * 15 * time) +
-          0.3 * np.sin(2 * np.pi * 30 * time) +
-          0.5 * np.random.randn(len(time)))
-your_time_series_data = signal
-
-# 2. Extract spectral drivers (frequencies) using FFT
-yf = rfft(your_time_series_data)
-xf = rfftfreq(len(your_time_series_data), 1 / sampling_rate) # Get the frequencies
-# Select top K frequencies based on amplitude as drivers
-spectrum_amplitudes = np.abs(yf)
-# Exclude 0 Hz component if desired
-top_k_indices = np.argsort(spectrum_amplitudes[1:])[-NUM_DRIVERS:] + 1
-drivers_gamma = xf[top_k_indices] # Frequencies are the drivers
-
-print(f"Using top {NUM_DRIVERS} frequencies as drivers: {np.round(drivers_gamma, 2)}")
-
-# 3. Define the domain for analysis (map to time points)
-ymin = time[0]
-ymax = time[-1]
-num_points = len(your_time_series_data) # Analyze at the original time resolution
-
-# --- SEFA Analysis ---
-# 4. Initialize and Run SEFA Pipeline
-sefa_analyzer = SEFA(config=config)
-sefa_analyzer.run_pipeline(
-    drivers_gamma=drivers_gamma,
-    ymin=ymin,
-    ymax=ymax,
-    num_points=num_points
-)
-
-# 5. Get Results
-results = sefa_analyzer.get_results()
-sefa_score = results['sefa_score']
-processed_domain_y = results['processed_domain_y'] # This corresponds to the time points
-
-# --- Interpretation ---
-# 6. Find and interpret significant regions (e.g., using peak finding)
-# Find peaks in the SEFA score - adjust prominence/height as needed
-peaks, properties = find_peaks(sefa_score, prominence=np.std(sefa_score)) # Example threshold
-significant_times = processed_domain_y[peaks]
-peak_scores = sefa_score[peaks]
-
-print(f"\nFound {len(significant_times)} significant time points:")
-for t, s in zip(significant_times, peak_scores):
-    print(f"  Time: {t:.3f} s, SEFA Score: {s:.4f}")
-
-# Optional: Use SEFA's built-in thresholding
-# mask = sefa_analyzer.threshold_score(method='percentile', percentile=98)
-# significant_times_thresh = processed_domain_y[mask]
-# print(f"\nFound {len(significant_times_thresh)} points above 98th percentile threshold.")
-
-# --- Plotting (Optional Example) ---
-import matplotlib.pyplot as plt
-plt.style.use('seaborn-v0_8-darkgrid')
-fig, ax1 = plt.subplots(figsize=(14, 7))
-
-# Plot original signal
-color = 'tab:grey'
-ax1.set_xlabel('Time (s)')
-ax1.set_ylabel('Original Signal', color=color)
-ax1.plot(time, your_time_series_data, color=color, alpha=0.6, label='Original Signal')
-ax1.tick_params(axis='y', labelcolor=color)
-
-# Plot SEFA score on a secondary axis
-ax2 = ax1.twinx()
-color = 'tab:red'
-ax2.set_ylabel('SEFA Score', color=color)
-ax2.plot(processed_domain_y, sefa_score, color=color, label='SEFA Score')
-ax2.scatter(significant_times, peak_scores, color='black', marker='o', s=50, zorder=10, label=f'Significant Peaks ({len(significant_times)})')
-ax2.tick_params(axis='y', labelcolor=color)
-
-fig.tight_layout()
-fig.legend(loc='upper right', bbox_to_anchor=(0.95, 0.95))
-plt.title('SEFA Analysis of Time Series Data')
-plt.show()
-```
-
-## Integration with Machine Learning
-
-The `sefa_ml_model.py` file provides scikit-learn compatible components that allow you to:
-
-1. Use SEFA as a full ML model or even just a feature extractor in other ML pipelines
-2. Train models to recognize patterns with SEFA characteristics
-3. Create hybrid systems that combine traditional and SEFA-based approaches
-
-This integration makes SEFA particularly valuable for problems where purely statistical approaches miss important structural features.
-
 ## Limitations and Considerations
 
 When applying SEFA to new domains, keep these points in mind:
@@ -468,18 +341,34 @@ Dillon, B. (2025). Symbolic Emergence Field Analysis (SEFA). Available from [[ht
 
 ## License
 
-This project is licensed under the **Business Source License 1.1 (BSL 1.1)**. 
+Intellectual Property Notice – SEFA Framework
 
-- **Effective Date**: May 3, 2025
-- **Change Date**: May 3, 2029
-- On the **Change Date**, this project will transition to the **GNU General Public License Version 2.0 or later**.
+The SEFA (Symbolic Emergence Field Analysis) algorithm, codebase, and all mathematical concepts, including but not limited to:
 
-For more details, see the [LICENSE](https://github.com/severian42/Symbolic-Emergence-Field-Analysis/blob/main/LICENSE.md) file.
+- Entropy-weighted symbolic emergence scoring
+- Normalized local signal decomposition (A, C, F, E features)
+- Global alpha calibration via information deficit
+- Log-based exponential feature synthesis and scoring
+- Self-calibrated emergence detection for 1D, 2d, 3d and multi-dimensional time-series
+- The SEFA scoring profile aggregation and symbolic peak analysis
+
+are proprietary intellectual property of BeckettDillon42@gmail.com protected under the Business Source License 1.1 and U.S. copyright law.
+
+No portion of this repository, code, or theoretical framework may be used in commercial products, research platforms, or derivative software without a separate, signed commercial license agreement.
+
+All rights to SEFA, including algorithmic extensions, theoretical variants, and any SEFA-related scoring functions, are reserved by the author.
+
+Any unauthorized commercial use, distribution, or integration will constitute IP infringement and is subject to legal action.
+
+For licensing inquiries, contact: BeckettDillon42@gmail.com
+
+(Patent Pending – United States, Provisional Filed: May 1, 2025)
+
 
 The SEFA math and [White Paper](https://github.com/severian42/Symbolic-Emergence-Field-Analysis/tree/main/SEFA%20White%20Paper) is licensed under the [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) License - see the LICENSE.md file for details.
 
 ## Contact
 
-If you would like to discuss potential commercial licensing for your use case and industry, and for any other questions or discussions, you can reach me at beckettdillon42@gmail.com.
+If you would like to discuss potential commercial licensing for your use case and industry, and for any other questions or discussions, you can reach me at BeckettDillon42@gmail.com
 
 ---
